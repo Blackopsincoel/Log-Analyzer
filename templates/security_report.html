@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Web Security Auditor: Hassas Veri İhlal Raporu</h2>
+
+    <h3>Bulgu Tiplerine Göre Dağılım</h3>
+    <ul>
+        {% for type, count in finding_counts %}
+            <li><strong>{{ type }}</strong>: {{ count }} bulgu</li>
+        {% endfor %}
+    </ul>
+    
+    <p class="finding-critical">Bu raporda sadece 'CRITICAL_SECURITY' seviyesindeki bulgular yer almaktadır.</p>
+    
+    <h3>Detaylı Güvenlik Bulguları</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Zaman</th>
+                <th>URL</th>
+                <th>Depolama Tipi</th>
+                <th>Bulgu Tipi</th>
+                <th>Anahtar Adı</th>
+                <th>Mesaj (Değer Snippet)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp }}</td>
+                <td><a href="{{ log.url }}" target="_blank">{{ log.url }}</a></td>
+                <td>{{ 'Local Storage' if 'Local Storage' in log.message else 'Session Storage' }}</td>
+                <td class="finding-critical">{{ log.finding_type }}</td>
+                <td>{{ log.key_name }}</td>
+                <td>{{ log.message }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

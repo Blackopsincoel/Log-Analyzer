@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Genel Log Analiz Paneli</h2>
+
+    <p>Log Seviyesi Dağılımı:</p>
+    <ul>
+        {% for level, count in log_counts %}
+            <li><strong>{{ level }}</strong>: {{ count }} kayıt</li>
+        {% endfor %}
+    </ul>
+    
+    <h3>Son Kayıtlar (Filtre: {{ current_filter }})</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Zaman Damgası</th>
+                <th>Seviye</th>
+                <th>Kaynak</th>
+                <th>Mesaj</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <td>{{ log.timestamp }}</td>
+                <td class="{{ 'finding-critical' if log.level == 'CRITICAL_SECURITY' else '' }}">{{ log.level }}</td>
+                <td>{{ log.source }}</td>
+                <td>{{ log.message }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
